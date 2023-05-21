@@ -3,7 +3,7 @@ import instance from "./axios";
 export const getLaunch = async (page = 1, filter = {}, id = undefined) => {
   const { name, start, end, status = "all", sort = -1 } = filter;
   let query = {
-    details: { $ne: null },
+    // details: { $ne: null },
   };
   if (status !== "all") {
     query = { ...query, success: status ? true : null };

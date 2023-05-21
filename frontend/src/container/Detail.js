@@ -1,43 +1,25 @@
-import { useState, useEffect } from "react";
-import { experimentalStyled } from "@mui/material/styles";
-import NorthIcon from "@mui/icons-material/North";
-import { Box, Paper, Grid, Button, CircularProgress, Fab } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
-import { getLaunch } from "../middleware";
-import moment from "moment";
-import _ from "lodash";
-import styled from "styled-components";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import { Box, Paper, Grid, Button } from "@mui/material";
+import { experimentalStyled as styled } from "@mui/material/styles";
+import _ from "lodash";
+import moment from "moment";
+import { useState, useEffect } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useParams, useNavigate } from "react-router-dom";
+import ImageContainer from "../components/Image";
+import { getLaunch } from "../middleware";
 
-const Item = experimentalStyled(Paper)(({ theme }) => ({
+const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   backgroundColor: "transparent",
   color: theme.palette.text.white,
   flexDirection: "column",
 }));
 
-const ImgContainer = styled.div`
-  overflow: hidden;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: all 0.3s ease;
-  }
-  &:hover {
-    img {
-      transform: scale(1.25);
-    }
-  }
-`;
-
 export default function ResponsiveGrid() {
-  const [rocket, setRocket] = useState(undefined);
-  const { id } = useParams();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [rocket, setRocket] = useState(undefined);
 
   useEffect(() => {
     (async () => {
@@ -58,6 +40,7 @@ export default function ResponsiveGrid() {
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
+        boxSizing: "border-box",
       }}
     >
       {rocket && (
@@ -82,25 +65,33 @@ export default function ResponsiveGrid() {
             columns={{ xs: 4, sm: 8, md: 12 }}
           >
             <Grid item xs={4} sm={8} md={12}>
-              <ImgContainer
-                style={{ maxWidth: rocket?.links?.webcast && "800px" }}
+              <Box
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
               >
-                {rocket?.links?.webcast ? (
-                  <iframe
-                    sandbox="allow-same-origin allow-forms allow-popups allow-scripts allow-presentation"
-                    src={`https://youtube.com/embed/${rocket?.links?.youtube_id}?autoplay=0`}
-                    width={"100%"}
-                    height={"100%"}
-                    style={{ border: "none" }}
-                  />
-                ) : (
-                  <LazyLoadImage
-                    src={rocket?.links?.flickr.original?.[0] ?? null}
-                    alt=""
-                    width={"100%"}
-                  />
-                )}
-              </ImgContainer>
+                <ImageContainer style={{ maxWidth: "800px" }}>
+                  {rocket?.links?.webcast ? (
+                    <iframe
+                      sandbox="allow-same-origin allow-forms allow-popups allow-scripts allow-presentation"
+                      src={`https://youtube.com/embed/${rocket?.links?.youtube_id}?autoplay=0`}
+                      width={"100%"}
+                      height={"100%"}
+                      style={{ border: "none" }}
+                    />
+                  ) : (
+                    rocket?.links?.flickr.original?.[0] && (
+                      <LazyLoadImage
+                        src={rocket?.links?.flickr.original?.[0]}
+                        alt=""
+                        width={"100%"}
+                      />
+                    )
+                  )}
+                </ImageContainer>
+              </Box>
             </Grid>
           </Grid>
           <Item>
@@ -110,7 +101,7 @@ export default function ResponsiveGrid() {
             <Box sx={{ mt: 2, fontWeight: "bold", fontSize: "h6.fontSize" }}>
               {rocket.name}
             </Box>
-            <Box sx={{ mt: 5 }}>{rocket.details}</Box>
+            <Box sx={{ mt: 5 }}>{rocket?.details ?? "None"}</Box>
           </Item>
         </>
       )}

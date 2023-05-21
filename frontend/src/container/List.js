@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import { experimentalStyled } from "@mui/material/styles";
 import NorthIcon from "@mui/icons-material/North";
 import { Box, Paper, Grid, Button, CircularProgress, Fab } from "@mui/material";
-import { getLaunch } from "../middleware";
-import moment from "moment";
+import { experimentalStyled as styled } from "@mui/material/styles";
 import _ from "lodash";
-import styled from "styled-components";
+import moment from "moment";
+import { useState, useEffect } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import ImageContainer from "../components/Image";
+import { getLaunch } from "../middleware";
 
-const Item = experimentalStyled(Paper)(({ theme }) => ({
+const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   backgroundColor: "transparent",
   color: theme.palette.text.white,
@@ -18,32 +18,9 @@ const Item = experimentalStyled(Paper)(({ theme }) => ({
   rowGap: theme.spacing(2),
 }));
 
-const ImgContainer = styled.div`
-  overflow: hidden;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: all 0.3s ease;
-  }
-  &:hover {
-    > div {
-      background-color: white;
-      transition: all 0.3s ease;
-      opacity: 0.7;
-    }
-    img {
-      transform: scale(1.25);
-    }
-  }
-`;
-
-export default function ResponsiveGrid() {
-  const [rockets, setRockets] = useState([]);
+export default function List() {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
-  const [nextPage, setNextPage] = useState(true); //有無 0, 1
   const [fetching, setFetching] = useState(false);
   const [filter, setFilter] = useState({
     name: "",
@@ -52,15 +29,8 @@ export default function ResponsiveGrid() {
     status: "all",
     sort: -1,
   });
-  const navigate = useNavigate();
-
-  const handleFilter = async () => {
-    ScrollToTop();
-    const data = await getLaunch(1, filter);
-    setRockets(data.docs);
-    setCurrentPage(data.page);
-    setNextPage(data.hasNextPage);
-  };
+  const [nextPage, setNextPage] = useState(true); //有無
+  const [rockets, setRockets] = useState([]);
 
   const handleChange = (name) => (e) => {
     let value;
@@ -70,6 +40,14 @@ export default function ResponsiveGrid() {
       value = moment(e.toISOString()).format("YYYY-MM-DD");
     }
     setFilter((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFilter = async () => {
+    ScrollToTop();
+    const data = await getLaunch(1, filter);
+    setRockets(data.docs);
+    setCurrentPage(data.page);
+    setNextPage(data.hasNextPage);
   };
 
   const ScrollToEnd = () => {
@@ -107,17 +85,17 @@ export default function ResponsiveGrid() {
     return () => {
       window.removeEventListener("scroll", ScrollToEnd);
     };
-  });
+  }, [nextPage, currentPage, filter]);
 
   useEffect(() => {
-    (async () => {
-      if (!rockets.length) {
+    if (!rockets.length) {
+      (async () => {
         const data = await getLaunch();
         setRockets(data.docs);
         setCurrentPage(data.page);
         setNextPage(data.hasNextPage);
-      }
-    })();
+      })();
+    }
   }, []);
 
   return (
@@ -134,6 +112,7 @@ export default function ResponsiveGrid() {
           py: 4,
           backgroundColor: "#000000",
           minHeight: "100vh",
+          boxSizing: "border-box",
         }}
       >
         <Grid
@@ -145,13 +124,14 @@ export default function ResponsiveGrid() {
           {rockets.map((rocket, index) => (
             <Grid item xs={4} sm={4} md={6} key={index}>
               <Item>
-                <ImgContainer>
-                  <LazyLoadImage
-                    src={rocket?.links?.flickr.original?.[0] ?? null}
-                    alt=""
-                    width={"100%"}
-                  />
-                </ImgContainer>
+                <ImageContainer>
+                  {rocket?.links?.flickr.original?.[0] && (
+                    <LazyLoadImage
+                      src={rocket?.links?.flickr.original?.[0]}
+                      width={"100%"}
+                    />
+                  )}
+                </ImageContainer>
                 <Box sx={{ mt: 4 }}>
                   {moment(rocket.date_utc).format("MMMM D, YYYY")}
                 </Box>

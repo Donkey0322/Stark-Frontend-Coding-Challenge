@@ -15,6 +15,7 @@ let theme = createTheme({
       fab: {
         main: "#FFFDC4",
       },
+      text: "#FFFFFF",
     },
     secondary: {
       main: "#D8D8D8",
