@@ -12,11 +12,11 @@ import { getLaunch } from "../middleware";
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   backgroundColor: "transparent",
-  color: theme.palette.text.white,
+  color: theme.palette.donkey.white,
   flexDirection: "column",
 }));
 
-export default function ResponsiveGrid() {
+export default function Detail() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [rocket, setRocket] = useState(undefined);
@@ -36,7 +36,7 @@ export default function ResponsiveGrid() {
         flexGrow: 1,
         px: 2,
         py: 1,
-        backgroundColor: "#000000",
+        backgroundColor: "donkey.black",
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",

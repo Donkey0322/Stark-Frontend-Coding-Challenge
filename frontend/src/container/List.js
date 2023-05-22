@@ -13,7 +13,7 @@ import { getLaunch } from "../middleware";
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   backgroundColor: "transparent",
-  color: theme.palette.text.white,
+  color: theme.palette.donkey.white,
   flexDirection: "column",
   rowGap: theme.spacing(2),
 }));
@@ -110,7 +110,7 @@ export default function List() {
           flexGrow: 1,
           px: 2,
           py: 4,
-          backgroundColor: "#000000",
+          backgroundColor: "donkey.black",
           minHeight: "100vh",
           boxSizing: "border-box",
         }}
@@ -176,7 +176,6 @@ export default function List() {
             position: "fixed",
             bottom: 16,
             right: 16,
-            backgroundColor: "fab.main",
             opacity: 0.7,
           }}
           onClick={() => {

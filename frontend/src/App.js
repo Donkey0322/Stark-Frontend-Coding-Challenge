@@ -20,7 +20,7 @@ let theme = createTheme({
     secondary: {
       main: "#D8D8D8",
     },
-    text: {
+    donkey: {
       white: "#FFFFFF",
       black: "#000000",
     },
@@ -42,16 +42,24 @@ let theme = createTheme({
         },
       },
     },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "lightgrey",
+          color: "#000000",
+        },
+      },
+    },
   },
-  // breakpoints: {
-  //   values: {
-  //     xs: 0,
-  //     sm: 600,
-  //     md: 1000,
-  //     lg: 1200,
-  //     xl: 1536,
-  //   },
-  // },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 1000,
+      lg: 1400,
+      xl: 1536,
+    },
+  },
 });
 
 theme = responsiveFontSizes(theme);

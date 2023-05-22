@@ -21,7 +21,7 @@ const ImageContainer = styled.div`
 `;
 
 export default ({
-  children = <Box sx={{ color: "text.white" }}>No Picture</Box>,
+  children = <Box sx={{ color: "donkey.white" }}>No Picture</Box>,
   ...prop
 }) => {
   return <ImageContainer {...prop}>{children}</ImageContainer>;
