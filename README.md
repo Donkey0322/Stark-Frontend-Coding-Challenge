@@ -40,6 +40,7 @@ About main list:
 4. 有些 launch 會沒有封面照片，會以 "No Picture 呈現"。<br>
 5. Scroll to top button。<br>
 6. 按下 title "SpaceX" 會重新刷新頁面。
+7. 點選 "LEARN MORE" 跳轉到詳情頁面。
 
 About detail page:
 
@@ -51,3 +52,9 @@ About detail page:
 1. 以公司提供的 endpoint v4/v5 launch 撈取到最新的 launch information 是 2022/12/05，而範例顯示了 2023 年的資料，上網查了一下：SpaceX 團隊有新提供一支一小時可以敲 15 次的 api (2.2.0)，可以撈到最新的資料，不知公司是不是以該支 api 作為 endpoint？
 2. 封面照片是抓取 launch information 裡 .links.flickr.original 的第一個 element、發射日期是 .date_utc、名稱是 .name、影片是抓取 .links.youtube_id 再去向 youtube embed video。
 3. 最新資料為 2022/12/05，而最新「有封面照片的」資料為 2022/04/17。
+4. 面試時有提到要寫後端 Node.js，不知我是否需要開自己的後端，並由後端向 SpaceX api 索取資料再傳回前端？現行之下的作法是由 axios 直接敲 SpaceX endpoint。
+
+### Enhancement
+
+1. Error handling: 若無連上網路則跳出錯誤頁面請使用者連上網路。
+2. Back to main page 時保留 filter 及以過去索取的資料並停留在剛剛點選 detail 的 launch。
